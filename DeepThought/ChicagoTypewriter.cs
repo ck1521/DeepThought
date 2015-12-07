@@ -133,7 +133,7 @@ namespace DeepThought
         {
             Interlocked.Increment(ref this.curThreadCnt);
 
-            logger.Debug("initiating loader on document {0}, current thread count:{1}", id + 1, curThreadCnt);
+            logger.Write("initiating loader on document {0}, current thread count:{1}", id + 1, curThreadCnt);
 
             Dictionary<string, int> frequency = Lock(input);
 
@@ -173,7 +173,7 @@ namespace DeepThought
             Interlocked.Decrement(ref this.curThreadCnt);
             Interlocked.Increment(ref this.point);
 
-            logger.Debug("document {0} load complete, current progress: {1}/{2} , current thread count:{3}",
+            logger.Write("document {0} load complete, current progress: {1}/{2} , current thread count:{3}",
                 id + 1, this.point, this.docCnt, this.curThreadCnt);
         }
 
@@ -202,7 +202,7 @@ namespace DeepThought
         {
             Interlocked.Increment(ref this.curThreadCnt);
 
-            logger.Debug("initiating charger on document {0}, current thread count:{1}", i, curThreadCnt);
+            logger.Write("initiating charger on document {0}, current thread count:{1}", i, curThreadCnt);
 
             SortedList<double, string> keywords = new SortedList<double, string>(10, new DuplicateKeyComparer<double>());
 
@@ -247,7 +247,7 @@ namespace DeepThought
             Interlocked.Decrement(ref this.curThreadCnt);
             Interlocked.Increment(ref this.point);
 
-            logger.Debug("document {0} charged, current progress: {1}/{2}", i, this.point, this.docCnt);
+            logger.Write("document {0} charged, current progress: {1}/{2}", i, this.point, this.docCnt);
         }
 
         #endregion
@@ -263,7 +263,7 @@ namespace DeepThought
 
             this.docCnt = files.Length;
 
-            logger.Debug("Total Document Count:{0}", this.docCnt);
+            logger.Write("Total Document Count:{0}", this.docCnt);
 
             sw.Restart();
 
@@ -285,9 +285,9 @@ namespace DeepThought
 
             sw.Stop();
 
-            logger.Debug("Lock & Load time cost:{0}ms, Avg:{1}ms", sw.ElapsedMilliseconds, sw.ElapsedMilliseconds / this.docCnt);
+            logger.Write("Lock & Load time cost:{0}ms, Avg:{1}ms", sw.ElapsedMilliseconds, sw.ElapsedMilliseconds / this.docCnt);
 
-            logger.Debug("All documents loaded.");
+            logger.Write("All documents loaded.");
 
             this.point = 0;
 
@@ -299,7 +299,7 @@ namespace DeepThought
 
             this.AvgDocLen = sumLen / 1.0 / docCnt;
 
-            logger.Debug("Average document length:{0} words", this.AvgDocLen);
+            logger.Write("Average document length:{0} words", this.AvgDocLen);
 
             ConcurrentDictionary<int, List<string>> resultPairs = new ConcurrentDictionary<int, List<string>>();
 
@@ -321,7 +321,7 @@ namespace DeepThought
 
             sw.Stop();
 
-            logger.Debug("Trigger time cost: {0}ms, Avg:{1}ms", sw.ElapsedMilliseconds, sw.ElapsedMilliseconds / this.docCnt);
+            logger.Write("Trigger time cost: {0}ms, Avg:{1}ms", sw.ElapsedMilliseconds, sw.ElapsedMilliseconds / this.docCnt);
 
             #region Output Results
 
