@@ -32,7 +32,7 @@ namespace DeepThought
             }
             catch (Exception ex)
             {
-                logger.Write("Error: {0}", ex.ToString());
+                logger.Debug("Error: {0}", ex.ToString());
                 Console.WriteLine("Some error occured.");
             }
             Console.ReadKey();

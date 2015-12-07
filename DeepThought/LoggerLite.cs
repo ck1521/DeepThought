@@ -51,13 +51,14 @@ namespace Jupiter
             return loggerDic[type];
         }
 
-        public void Write(string log, params object[] args)
+        public void Debug(string log, params object[] args)
         {
             lock (LogEntries)
             {
-                LogEntries.Enqueue(FormatLog(string.Format(log, args)));
+                LogEntries.Enqueue(FormatLog(string.Format(log, args), LogLevel.DEBUG));
             }
         }
+
 
         private static void Initialize()
         {
@@ -71,9 +72,10 @@ namespace Jupiter
             this.mClassName = type.Name.ToString();
         }
 
-        private string FormatLog(string log)
+        private string FormatLog(string log, LogLevel level)
         {
-            return string.Format("{0}\t{1}\t{2}\t{3}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss.fff"), Thread.CurrentThread.ManagedThreadId, this.mClassName, log);
+            return string.Format("{0}\t{1}\t{2}\t{3}\t{4}",
+                level.ToString(), DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss.fff"), Thread.CurrentThread.ManagedThreadId, this.mClassName, log);
         }
 
         private static void WorkerThread()
@@ -111,6 +113,14 @@ namespace Jupiter
             {
                 sw.Dispose();
             }
+        }
+
+        enum LogLevel
+        {
+            TRACE,
+            DEBUG,
+            WARN,
+            ERROR
         }
     }
 }
