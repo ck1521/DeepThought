@@ -17,13 +17,13 @@ namespace Jupiter
         private static object locker = new object();
         private static bool loaded = false;
 
-        private static Dictionary<Type, LoggerLite> loggerDic = new Dictionary<Type,LoggerLite>();
+        private static Dictionary<Type, LoggerLite> loggerDic = new Dictionary<Type, LoggerLite>();
 
         private static StreamWriter sw = null;
         private static Queue<string> LogEntries = new Queue<string>();
 
         private string mClassName = null;
-        
+
         public static LoggerLite GetInstance(Type type)
         {
             if (!loaded)
@@ -53,12 +53,27 @@ namespace Jupiter
 
         public void Debug(string log, params object[] args)
         {
-            lock (LogEntries)
-            {
-                LogEntries.Enqueue(FormatLog(string.Format(log, args), LogLevel.DEBUG));
-            }
+            Write(LogLevel.DEBUG, log, args);
         }
 
+        public void Warn(string log, params object[] args)
+        {
+            Write(LogLevel.WARN, log, args);
+        }
+
+        public void Trace(string log, params object[] args)
+        {
+            Write(LogLevel.TRACE, log, args);
+        }
+
+
+        private void Write(LogLevel level, string log, params object[] args)
+        {
+            lock (LogEntries)
+            {
+                LogEntries.Enqueue(FormatLog(string.Format(log, args), level));
+            }
+        }
 
         private static void Initialize()
         {
